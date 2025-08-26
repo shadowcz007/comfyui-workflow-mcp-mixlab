@@ -1,0 +1,36 @@
+{
+  "auto_save": "true",
+  "backup_interval": "3600",
+  "max_history": "100",
+  "enable_notifications": "true",
+  "log_level": "INFO",
+  "custom_settings": {
+    "enable_discord_notifications": "false",
+    "enable_slack_notifications": "false",
+    "enable_email_notifications": "false",
+    "discord_webhook_url": "",
+    "slack_webhook_url": "",
+    "smtp_server": "",
+    "smtp_port": "587",
+    "smtp_user": "",
+    "smtp_password": "",
+    "recipient_email": ""
+  },
+  "database": {
+    "type": "sqlite",
+    "path": "comfyui_data.db",
+    "backup_enabled": "true",
+    "backup_interval": "86400"
+  },
+  "auxiliary_services": {
+    "file_monitor": "false",
+    "scheduled_tasks": "false",
+    "api_proxy": "false",
+    "cache_service": "false"
+  },
+  "workflow": {
+    "auto_load_default": "true",
+    "default_workflow_path": "default_workflow.json",
+    "backup_workflows": "true"
+  }
+} 
