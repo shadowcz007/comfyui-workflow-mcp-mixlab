@@ -30,8 +30,7 @@ def start_mcp_server():
             get_history, get_history_by_id, clear_history, delete_history_item,
             
             # 文件上传和管理工具
-            list_models, list_models_by_folder, list_embeddings, list_extensions,
-            view_metadata, upload_image, view_image,
+            upload_image, view_image,
             
             # 系统信息工具
             get_system_stats, get_features, get_object_info, get_object_info_by_node,
@@ -98,37 +97,6 @@ def start_mcp_server():
         def delete_history_item_tool(prompt_id: str) -> str:
             """删除特定的历史记录项"""
             result = delete_history_item(prompt_id)
-            return str(result)
-        
-        # 文件上传和管理工具
-        @mcp.tool
-        def list_models_tool() -> str:
-            """获取所有模型类型列表"""
-            result = list_models()
-            return str(result)
-        
-        @mcp.tool
-        def list_models_by_folder_tool(folder: str) -> str:
-            """获取特定文件夹的模型列表"""
-            result = list_models_by_folder(folder)
-            return str(result)
-        
-        @mcp.tool
-        def list_embeddings_tool() -> str:
-            """获取嵌入模型列表"""
-            result = list_embeddings()
-            return str(result)
-        
-        @mcp.tool
-        def list_extensions_tool() -> str:
-            """获取扩展列表"""
-            result = list_extensions()
-            return str(result)
-        
-        @mcp.tool
-        def view_metadata_tool(folder_name: str, filename: str) -> str:
-            """查看模型元数据"""
-            result = view_metadata(folder_name, filename)
             return str(result)
         
         @mcp.tool
@@ -215,7 +183,7 @@ def start_mcp_server():
         print("🔧 已集成 ComfyUI API 工具:")
         print("   - 工作流执行: submit_workflow, get_queue_info, clear_queue, delete_queue_item, interrupt_processing, free_memory")
         print("   - 历史记录管理: get_history, get_history_by_id, clear_history, delete_history_item")
-        print("   - 文件管理: list_models, list_embeddings, list_extensions, view_metadata, upload_image, view_image")
+        print("   - 文件管理: upload_image, view_image")
         print("   - 系统信息: get_system_stats, get_features, get_object_info, get_queue_status, get_prompt_status")
         return True
         

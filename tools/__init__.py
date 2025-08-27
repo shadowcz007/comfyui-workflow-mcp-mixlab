@@ -25,12 +25,7 @@ __all__ = [
     "clear_history",
     "delete_history_item",
     
-    # 文件上传和管理工具
-    "list_models",
-    "list_models_by_folder",
-    "list_embeddings",
-    "list_extensions",
-    "view_metadata",
+    # 文件上传和管理工具  
     "upload_image",
     "view_image",
     

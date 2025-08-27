@@ -34,10 +34,22 @@ class ComfyUIToolsBase:
         if self.prompt_server is None:
             raise RuntimeError("ComfyUI服务器未启动或无法访问")
         
+        # 检查是否是实例方法
         if hasattr(self.prompt_server, method_name):
             return getattr(self.prompt_server, method_name)
-        else:
-            raise AttributeError(f"服务器方法 '{method_name}' 不存在")
+        
+        # 检查是否是路由处理函数（在routes中定义）
+        if hasattr(self.prompt_server, 'routes'):
+            for route in self.prompt_server.routes:
+                if hasattr(route, 'handler') and route.handler.__name__ == method_name:
+                    return route.handler
+        
+        # 检查是否是prompt_queue的方法
+        if hasattr(self.prompt_server, 'prompt_queue'):
+            if hasattr(self.prompt_server.prompt_queue, method_name):
+                return getattr(self.prompt_server.prompt_queue, method_name)
+        
+        raise AttributeError(f"服务器方法 '{method_name}' 不存在")
     
     def call_server_method(self, method_name: str, *args, **kwargs):
         """调用服务器方法"""

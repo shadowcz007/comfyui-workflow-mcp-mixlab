@@ -3,8 +3,30 @@
 """
 
 import asyncio
+import concurrent.futures
 from typing import Dict, Any, Optional
 from .base_tools import tools_base
+
+def run_async_safely(async_func):
+    """
+    安全地运行异步函数，避免事件循环冲突
+    
+    Args:
+        async_func: 要运行的异步函数
+    
+    Returns:
+        异步函数的执行结果
+    """
+    try:
+        # 尝试获取当前事件循环
+        loop = asyncio.get_running_loop()
+        # 如果当前有运行的事件循环，使用线程池
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future = executor.submit(asyncio.run, async_func())
+            return future.result()
+    except RuntimeError:
+        # 如果没有运行的事件循环，直接运行
+        return asyncio.run(async_func())
 
 def get_system_stats() -> Dict[str, Any]:
     """
@@ -35,16 +57,7 @@ def get_system_stats() -> Dict[str, Any]:
                 return {"error": str(e)}
         
         # 运行异步函数
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            new_loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(new_loop)
-            try:
-                result = new_loop.run_until_complete(async_get_system_stats())
-            finally:
-                new_loop.close()
-        else:
-            result = loop.run_until_complete(async_get_system_stats())
+        result = run_async_safely(async_get_system_stats)
         
         return result
         
@@ -80,16 +93,7 @@ def get_features() -> Dict[str, Any]:
                 return {"error": str(e)}
         
         # 运行异步函数
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            new_loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(new_loop)
-            try:
-                result = new_loop.run_until_complete(async_get_features())
-            finally:
-                new_loop.close()
-        else:
-            result = loop.run_until_complete(async_get_features())
+        result = run_async_safely(async_get_features)
         
         return result
         
@@ -125,16 +129,7 @@ def get_object_info() -> Dict[str, Any]:
                 return {"error": str(e)}
         
         # 运行异步函数
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            new_loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(new_loop)
-            try:
-                result = new_loop.run_until_complete(async_get_object_info())
-            finally:
-                new_loop.close()
-        else:
-            result = loop.run_until_complete(async_get_object_info())
+        result = run_async_safely(async_get_object_info)
         
         return result
         
@@ -173,16 +168,7 @@ def get_object_info_by_node(node_class: str) -> Dict[str, Any]:
                 return {"error": str(e)}
         
         # 运行异步函数
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            new_loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(new_loop)
-            try:
-                result = new_loop.run_until_complete(async_get_object_info_node())
-            finally:
-                new_loop.close()
-        else:
-            result = loop.run_until_complete(async_get_object_info_node())
+        result = run_async_safely(async_get_object_info_node)
         
         return result
         
@@ -218,16 +204,7 @@ def get_queue_status() -> Dict[str, Any]:
                 return {"error": str(e)}
         
         # 运行异步函数
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            new_loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(new_loop)
-            try:
-                result = new_loop.run_until_complete(async_get_queue())
-            finally:
-                new_loop.close()
-        else:
-            result = loop.run_until_complete(async_get_queue())
+        result = run_async_safely(async_get_queue)
         
         return result
         
@@ -263,16 +240,7 @@ def get_prompt_status() -> Dict[str, Any]:
                 return {"error": str(e)}
         
         # 运行异步函数
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            new_loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(new_loop)
-            try:
-                result = new_loop.run_until_complete(async_get_prompt())
-            finally:
-                new_loop.close()
-        else:
-            result = loop.run_until_complete(async_get_prompt())
+        result = run_async_safely(async_get_prompt)
         
         return result
         
