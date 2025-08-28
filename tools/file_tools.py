@@ -4,15 +4,18 @@
 
 import asyncio
 import os
+import base64
+import io
 from typing import Dict, Any, Optional
 from .base_tools import tools_base
 
-def upload_image(image_path: str, subfolder: str = "", upload_type: str = "input", overwrite: bool = False) -> Dict[str, Any]:
+def upload_image(image_base64: str, filename: str, subfolder: str = "", upload_type: str = "input", overwrite: bool = False) -> Dict[str, Any]:
     """
-    上传图片文件
+    上传base64格式的图片
     
     Args:
-        image_path: 图片文件路径
+        image_base64: base64编码的图片数据
+        filename: 文件名
         subfolder: 子文件夹（可选）
         upload_type: 上传类型（input/output/temp）
         overwrite: 是否覆盖现有文件
@@ -21,23 +24,28 @@ def upload_image(image_path: str, subfolder: str = "", upload_type: str = "input
         上传结果
     """
     try:
-        # 检查文件是否存在
-        if not os.path.exists(image_path):
-            return {"error": f"文件不存在: {image_path}"}
+        # 解码base64数据
+        try:
+            # 移除可能的数据URL前缀
+            if image_base64.startswith('data:image/'):
+                image_base64 = image_base64.split(',')[1]
+            
+            image_data = base64.b64decode(image_base64)
+        except Exception as e:
+            return {"error": f"base64解码失败: {e}"}
         
         # 创建模拟的文件对象
         class MockImageFile:
-            def __init__(self, filepath):
-                self.filepath = filepath
-                self.filename = os.path.basename(filepath)
-                self.file = open(filepath, 'rb')
+            def __init__(self, data, filename):
+                self.filename = filename
+                self.file = io.BytesIO(data)
             
             def read(self):
                 return self.file.read()
         
         # 创建模拟的POST数据
         mock_post_data = {
-            "image": MockImageFile(image_path),
+            "image": MockImageFile(image_data, filename),
             "subfolder": subfolder,
             "type": upload_type,
             "overwrite": str(overwrite).lower()

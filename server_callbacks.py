@@ -100,9 +100,9 @@ def start_mcp_server():
             return str(result)
         
         @mcp.tool
-        def upload_image_tool(image_path: str, subfolder: str = "", upload_type: str = "input", overwrite: bool = False) -> str:
-            """上传图片文件"""
-            result = upload_image(image_path, subfolder, upload_type, overwrite)
+        def upload_image_tool(image_base64: str, filename: str, subfolder: str = "", upload_type: str = "input", overwrite: bool = False) -> str:
+            """上传base64格式的图片文件"""
+            result = upload_image(image_base64, filename, subfolder, upload_type, overwrite)
             return str(result)
         
         @mcp.tool
